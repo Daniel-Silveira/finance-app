@@ -1,20 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import NavigateConfig from "./src/navigation";
+import AppLoading from "expo-app-loading";
+import { useFonts } from "expo-font";
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    Gilroy: require("./assets/fonts/Gilroy-Regular.otf"),
+    "Gilroy-Medium": require("./assets/fonts/Gilroy-Medium.otf"),
+    "Gilroy-Bold": require("./assets/fonts/Gilroy-Bold.otf"),
+  });
+  
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <>
+      <StatusBar style="inverted" />
+      <NavigateConfig />
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
