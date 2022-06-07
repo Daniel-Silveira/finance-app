@@ -8,7 +8,7 @@ const Icon: any = FontAwesome
 const Chart: any = VictoryPie
 
 export const Resume = (props: any) => {
-  const filterByStatus = (status: string) => props.data.filter((f: any) => f.status === status)
+  const filterByStatus = (status: string) => props?.data.filter((f: any) => f.status === status)
   const totalPayable = calculateValueByArray(props.data, 'value')
   const finalBalance = props.user.balance - totalPayable
   const latePayment = calculateValueByArray(filterByStatus('LATE'), 'value')
@@ -21,7 +21,7 @@ export const Resume = (props: any) => {
       color: '#00FFAB',
     },
     totalPayable: {
-      text: 'Total',
+      text: 'Total gasto',
       color: '#fff',
     },
     latePayment: {

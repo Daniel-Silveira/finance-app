@@ -9,13 +9,14 @@ const Icon: any = AntDesign
 export const Card = (props: InvoiceType) => {
   const installments = `(${padStart(props.installments?.current)}/${padStart(props.installments?.total)})`
   const icon: any = {
-    CARD: 'creditcard',
-    INVOICE: 'barcode',
+    card: 'creditcard',
+    barcode: 'barcode',
   }
+
   return (
     <S.Card>
       <S.BoxIcon>
-        <Icon name={icon[props.type]} size={16} color="#fff" />
+        <Icon name={icon[props.category]} size={16} color="#fff" />
       </S.BoxIcon>
       <S.WrapperContent>
         <S.Content>

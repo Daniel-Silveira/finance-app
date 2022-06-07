@@ -4,17 +4,28 @@ import * as S from './styled'
 import { Feather } from '@expo/vector-icons'
 import { useState } from 'react'
 import { Button } from '../../shared/button'
+import { useInvoices } from '../../../hooks/useInvoices'
 
 const Icon: any = Feather
 
 export const Create = () => {
-  const [data, setData] = useState<any>({ installmentsSelected: '', categoriesSelected: '' })
+  const { createInvoice } = useInvoices()
 
-  const verifyTypeSelect = (type: string) => data.installmentsSelected === type
-  const verifyCategorySelect = (category: string) => data.categoriesSelected === category
+  const [data, setData] = useState<any>({
+    userId: '629f88e59080731c46f9be63',
+    paymentType: '',
+    category: '',
+  })
+
+  const verifyTypeSelect = (type: string) => data.paymentType === type
+  const verifyCategorySelect = (category: string) => data.category === category
 
   const changeState = (key: string, value: any) => {
     setData({ ...data, [key]: value })
+  }
+
+  const handleCreate = async () => {
+    const { status } = await createInvoice(data)
   }
 
   return (
@@ -40,7 +51,7 @@ export const Create = () => {
             key={item}
             text={convertTextTypes[item]}
             active={verifyTypeSelect(installmentsType[item])}
-            onPress={() => changeState('installmentsSelected', installmentsType[item])}
+            onPress={() => changeState('paymentType', installmentsType[item])}
           />
         ))}
       </S.WrapperCheck>
@@ -64,14 +75,15 @@ export const Create = () => {
       <S.WrapperCheck>
         {categoriesTypes.map(item => (
           <CheckBox
+            key={item}
             text={convertTextCategories[item]}
             active={verifyCategorySelect(categoriesType[item])}
-            onPress={() => changeState('categoriesSelected', categoriesType[item])}
+            onPress={() => changeState('category', categoriesType[item])}
           />
         ))}
       </S.WrapperCheck>
       <S.WrapperButton>
-        <Button text="Salvar" />
+        <Button text="Salvar" onPress={handleCreate} />
       </S.WrapperButton>
     </S.Container>
   )

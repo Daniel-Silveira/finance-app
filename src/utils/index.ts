@@ -7,6 +7,7 @@ export const formatPrice = (number: number) => {
 }
 
 export const calculateValueByArray = (array: any, selector: string) => {
+  if(!array?.length) return
   return array.reduce((prev: number, current: any) => prev + current[selector], 0)
 }
 

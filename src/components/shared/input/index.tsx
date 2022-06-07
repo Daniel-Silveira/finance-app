@@ -5,6 +5,8 @@ interface Props {
   width?: string
   keyboardType?: any
   onChangeText?: (value: string) => void
+  secureTextEntry?: boolean
+  value?: string
 }
 
 export const Input = (props: Props) => {
