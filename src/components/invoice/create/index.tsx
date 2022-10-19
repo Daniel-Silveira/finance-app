@@ -5,38 +5,90 @@ import { Feather } from '@expo/vector-icons'
 import { useState } from 'react'
 import { Button } from '../../shared/button'
 import { useInvoices } from '../../../hooks/useInvoices'
+import { InvoiceType } from '../../../types/Invoice'
+import { useEffect } from 'react'
+import { formatPrice } from '../../../utils'
 
 const Icon: any = Feather
 
-export const Create = () => {
-  const { createInvoice } = useInvoices()
+interface PropsCreate {
+  data: InvoiceType
+  closeModal: () => void
+}
 
-  const [data, setData] = useState<any>({
-    userId: '629f88e59080731c46f9be63',
+export const Create = (props: PropsCreate) => {
+  const { createInvoice, editInvoice } = useInvoices()
+
+  const [error, setError] = useState({ inputs: [], message: '' })
+  const [invoice, setInvoice] = useState<InvoiceType>({
     paymentType: '',
     category: '',
   })
 
-  const verifyTypeSelect = (type: string) => data.paymentType === type
-  const verifyCategorySelect = (category: string) => data.category === category
-
+  const verifyTypeSelect = (type: string) => invoice.paymentType === type
+  const verifyCategorySelect = (category: string) => invoice.category === category
   const changeState = (key: string, value: any) => {
-    setData({ ...data, [key]: value })
+    setInvoice({ ...invoice, [key]: value })
+  }
+
+  const validadeInputs = () => {
+    const requireds = ['title', 'value', 'paymentType', 'category']
+    const emptyInputs = requireds.filter(required => !invoice[required])
+    if (emptyInputs.length) {
+      setError({ inputs: emptyInputs, message: 'Por favor preencha todos os campos' })
+      return false
+    }
+    return true
+  }
+
+  const verifyErrorByInput = (input: string) => error.inputs.find((emptyInput: string) => emptyInput === input)
+
+  const handleActionSave = () => {
+    const createFn = () => createInvoice(invoice)
+    const editFn = () => editInvoice(props.data._id, invoice)
+    if (!!props.data?._id) {
+      return editFn()
+    }
+    return createFn()
   }
 
   const handleCreate = async () => {
-    const { status } = await createInvoice(data)
+    console.log(validadeInputs())
+    // const { status } = await handleActionSave()
+    // if (status === 201 || status === 200) {
+    //   await getInvoices()
+    //   props.closeModal()
+    // }
   }
 
+  useEffect(() => {
+    if (props.data) {
+      setInvoice(props.data)
+    }
+  }, [])
+  console.log(error)
   return (
     <S.Container>
       <DefaultText text="Novo item" type="bold" size="16px" margin={['bottom', '2%']} />
-      <Input placeholder="Titulo" onChangeText={value => changeState('title', value)} />
-      <Input placeholder="Valor" keyboardType="decimal-pad" onChangeText={value => changeState('value', value)} />
+      <Input
+        placeholder="Titulo"
+        error={verifyErrorByInput('title')}
+        value={invoice.title}
+        onChangeText={value => changeState('title', value)}
+      />
+      <Input
+        placeholder="Valor"
+        error={verifyErrorByInput('value')}
+        keyboardType="decimal-pad"
+        value={invoice.value?.toString()}
+        onChangeText={value => changeState('value', value.replace(',', '.'))}
+      />
       <Input
         placeholder="Dia de vencimento"
+        error={verifyErrorByInput('dueDay')}
         keyboardType="decimal-pad"
-        onChangeText={value => changeState('dueDate', value)}
+        value={invoice.dueDay?.toString()}
+        onChangeText={value => changeState('dueDay', value)}
       />
       <DefaultText
         text="Selecione o tipo de parcelamento"
@@ -61,13 +113,17 @@ export const Create = () => {
             placeholder="Nº da parcela atual"
             width="48.5%"
             keyboardType="decimal-pad"
-            onChangeText={value => setData({ ...data, installments: { ...data.installments, current: value } })}
+            value={String(invoice.installments?.current)}
+            onChangeText={value =>
+              setInvoice({ ...invoice, installments: { ...invoice.installments, current: value } })
+            }
           />
           <Input
             placeholder="Nº total de parcelas"
             width="48.5%"
             keyboardType="decimal-pad"
-            onChangeText={value => setData({ ...data, installments: { ...data.installments, total: value } })}
+            value={String(invoice.installments?.total)}
+            onChangeText={value => setInvoice({ ...invoice, installments: { ...invoice.installments, total: value } })}
           />
         </S.Group>
       )}
@@ -82,6 +138,7 @@ export const Create = () => {
           />
         ))}
       </S.WrapperCheck>
+      <DefaultText text={error.message} />
       <S.WrapperButton>
         <Button text="Salvar" onPress={handleCreate} />
       </S.WrapperButton>

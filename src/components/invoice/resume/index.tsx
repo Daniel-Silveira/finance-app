@@ -3,18 +3,20 @@ import { FontAwesome } from '@expo/vector-icons'
 import { DefaultText } from '../../shared/defaultText'
 import * as S from './styled'
 import { calculateValueByArray, formatPrice } from '../../../utils'
+import { Theme } from '../../../theme'
 
 const Icon: any = FontAwesome
 const Chart: any = VictoryPie
 
 export const Resume = (props: any) => {
+  if (!props?.data?.length) return null
   const filterByStatus = (status: string) => props?.data.filter((f: any) => f.status === status)
   const totalPayable = calculateValueByArray(props.data, 'value')
   const finalBalance = props.user.balance - totalPayable
-  const latePayment = calculateValueByArray(filterByStatus('LATE'), 'value')
-  const pendingPayment = calculateValueByArray(filterByStatus('PENDING'), 'value')
-  const paidPayment = calculateValueByArray(filterByStatus('PAID'), 'value')
-  
+  const latePayment = calculateValueByArray(filterByStatus('LATE'), 'value') || 0
+  const pendingPayment = calculateValueByArray(filterByStatus('PENDING'), 'value') || 0
+  const paidPayment = calculateValueByArray(filterByStatus('PAID'), 'value') || 0
+
   const typesChart: any = {
     finalBalance: {
       text: 'Saldo final',
@@ -26,15 +28,15 @@ export const Resume = (props: any) => {
     },
     latePayment: {
       text: 'Atrasado',
-      color: '#C70039',
+      color: Theme.colors.status.late,
     },
     pendingPayment: {
       text: 'Pendente',
-      color: '#F37121',
+      color: Theme.colors.status.pending,
     },
     paidPayment: {
       text: 'Pago',
-      color: '#05DFD7',
+      color: Theme.colors.status.paid,
     },
   }
 

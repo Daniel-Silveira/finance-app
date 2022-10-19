@@ -2,19 +2,24 @@ import * as S from './styled'
 import { AntDesign } from '@expo/vector-icons'
 import { DefaultText } from '../../shared/defaultText'
 import { InvoiceType } from '../../../types/Invoice'
-import { convertStatus, formatPrice, padStart } from '../../../utils'
+import { convertStatus, formatPrice, maxLengthText, padStart } from '../../../utils'
 
 const Icon: any = AntDesign
 
-export const Card = (props: InvoiceType) => {
+interface InvoiceProps extends InvoiceType {
+  onPress?: () => void
+}
+
+export const Card = (props: InvoiceProps) => {
   const installments = `(${padStart(props.installments?.current)}/${padStart(props.installments?.total)})`
   const icon: any = {
     card: 'creditcard',
     barcode: 'barcode',
+    others: 'ellipsis1'
   }
 
   return (
-    <S.Card>
+    <S.Card onPress={props.onPress}>
       <S.BoxIcon>
         <Icon name={icon[props.category]} size={16} color="#fff" />
       </S.BoxIcon>
@@ -22,7 +27,7 @@ export const Card = (props: InvoiceType) => {
         <S.Content>
           <S.WrapperName>
             <DefaultText size="18px" type="bold">
-              {props.title}
+              {maxLengthText(props.title, 21)}
             </DefaultText>
             <DefaultText margin={['left', '5%']}>{!!props.installments && installments}</DefaultText>
           </S.WrapperName>
@@ -31,7 +36,7 @@ export const Card = (props: InvoiceType) => {
           </DefaultText>
         </S.Content>
         <S.Content>
-          <DefaultText>Vencimento dia {padStart(props.dueDate)}</DefaultText>
+          <DefaultText>Vencimento dia {padStart(props.dueDay)}</DefaultText>
           <DefaultText color={convertStatus(props.status).color} type="bold">
             {convertStatus(props.status).text}
           </DefaultText>

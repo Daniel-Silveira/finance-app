@@ -1,0 +1,28 @@
+Porque Vite?
+R: Porque os navegadores atuais já suportam ES Modules (EcmaScript Modules) e com isso não é mais necessario usar o Create React App
+
+Algoritimo de reconciliaçao
+O virtual dom olha no html se algo mudou e altera só as mudanças
+
+UseCallback
+Guarda o valor de referencia da função
+
+UseMemo
+Salva o valor e não a ref de uma função
+
+MOCKS
+Simular saidas como um request por exemplo
+
+Stubs são objetos com respostas prontas
+
+S.O.L.I.D: Os 5 princípios da POO
+S — Single Responsiblity Principle (Princípio da responsabilidade única)
+O — Open-Closed Principle (Princípio Aberto-Fechado)
+L — Liskov Substitution Principle (Princípio da substituição de Liskov)
+I — Interface Segregation Principle (Princípio da Segregação da Interface)
+D — Dependency Inversion Principle (Princípio da inversão da dependência)
+
+
+State Manager
+Zustand
+ReState

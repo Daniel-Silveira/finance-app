@@ -14,7 +14,7 @@ export const WrapperMonths = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  min-width: 23%;
+  min-width: 30%;
 `
 
 export const BoxIcon = styled.TouchableOpacity`
@@ -29,4 +29,12 @@ export const BoxIcon = styled.TouchableOpacity`
 export const SpaceIcon = styled.View`
   width: 34px;
   height: 34px;
+`
+
+export const ActionButton = styled.TouchableOpacity`
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50px
 `

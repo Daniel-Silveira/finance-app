@@ -8,6 +8,11 @@ export interface InvoiceType {
     total: number
   }
   status: string
-  dueDate: string
+  dueDay: string
   paymentType: string
+  createdAt: string
+  installmentsDate: {
+    start: string
+    end: string
+  }
 }
